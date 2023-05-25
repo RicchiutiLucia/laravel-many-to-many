@@ -6,35 +6,28 @@
         <table class="table table-hover table-striped table-bordered ">
             <thead>
             <tr>
-                <th scope="col">Progetto</th>
-                <th scope="col">Titolo</th>
-                <th scope="col">Url</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Tecnologie</th>
+                <th scope="col">Id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Slug</th>
+                <th scope="col">Numero dei tipi</th>
                 <th scope="col">Azioni</th>
             </tr>
             </thead>
             <tbody>
-                @foreach ($projects as $project)
+                @foreach ($technologies as $technology)
                     <tr>
-                        <th>{{$project->id}}</th>
-                        <td>{{$project->title}}</td>
-                        <td>{{$project->url}}</td>
-                        <td>{{$project->type?->name}}</td>
-                        <td>
-                            @foreach ($project->technologies as $technology)
-                                <span class="badge rounded-pill text-bg-primary">{{$technology->name}}</span>
-                                
-                            @endforeach
-                        </td>
-                        <td class="d-flex">
+                        <td>{{$technology->id}}</td>
+                        <td>{{$technology->name}}</td>
+                        <td>{{$technology->slug}}</td>
+                        <td>{{count($technology->projects)}}</td>
+                        <td class="d-flex justify-content-center">
                             <div class="my-2">
-                                <a href="{{route('admin.projects.show',$project->slug)}}" class="btn btn-primary ">Info</a>
+                                <a href="{{route('admin.technologies.show',$technology->slug)}}" class="btn btn-primary ">Info</a>
                             </div>
                             <div class="mx-2 my-2">
-                                <a href="{{route('admin.projects.edit',$project->slug)}}" class="btn btn-warning ">Modifica</a>
+                                <a href="{{route('admin.technologies.edit',$technology->slug)}}" class="btn btn-warning ">Modifica</a>
                             </div>
-                            <form    class="form_delete_post my-2"  action="{{route('admin.projects.destroy',$project->slug)}}" method="POST">
+                            <form    class="form_delete_post my-2"  action="{{route('admin.technologies.destroy',$technology->slug)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger">Elimina</button>
@@ -42,6 +35,7 @@
                         </td>
                     </tr>
                 @endforeach
+               
             </tbody>
         </table>
 
