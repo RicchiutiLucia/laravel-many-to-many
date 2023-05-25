@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use App\Models\Type;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTypeRequest;
+use App\Http\Requests\UpdateTypeRequest;
+use Illuminate\Support\Str;
 
 class TypeController extends Controller
 {
@@ -16,8 +20,9 @@ class TypeController extends Controller
      */
     public function index()
     {
-        $types = Type::all();
-        return view('admin.types.index', compact('types'));
+        $types=Type::all();
+        $projects=Project::all();
+        return view('admin.types.index',compact('types','projects'));
     }
 
 
@@ -28,7 +33,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.types.create');
     }
 
     /**
@@ -37,9 +42,21 @@ class TypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTypeRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $data['slug'] = Str::slug($request->name,'-');
+
+        $checkType = Type::where('slug', $data['slug'])->first();
+
+        if($checkType){
+            return back()->withInput()->withErrors(['slug' => 'Con questo nome crei uno slug doppiato,perfavore cambia titolo']);
+        }
+
+        $newType = Type::create($data);
+
+        return redirect()->route('admin.types.index');
     }
 
     /**
@@ -49,8 +66,8 @@ class TypeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Type $type)
-    {
-        //
+    {    $types=Type::all();
+        return view('admin.types.show',compact('types'));
     }
 
     /**
@@ -61,7 +78,7 @@ class TypeController extends Controller
      */
     public function edit(Type $type)
     {
-        //
+        return view('admin.types.edit',compact('type'));
     }
 
     /**
@@ -71,9 +88,21 @@ class TypeController extends Controller
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(UpdateTypeRequest $request, Type $type)
     {
-        //
+        $data = $request->validated();
+
+        $data['slug'] = Str::slug($request->name,'-');
+
+        $checkType = Type::where('slug',$data['slug'])->where('id','<>',$type->id)->first();
+
+        if($checkType){
+            return back()->withInput()->withErrors(['slug' => 'Con questo nome crei uno slug doppiato,perfavore cambia titolo']);
+        }
+
+        $type->update($data);
+
+        return redirect()->route('admin.types.index');
     }
 
     /**
@@ -84,6 +113,6 @@ class TypeController extends Controller
      */
     public function destroy(Type $type)
     {
-        //
+        return redirect()->route('admin.types.index');
     }
 }

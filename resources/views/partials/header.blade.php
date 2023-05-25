@@ -25,6 +25,7 @@
                 <li class="nav-item d-flex">
                     <a class="nav-link" href="{{ route('admin.projects.index') }}">Progetti</a>
                     <a class="nav-link" href="{{route('admin.projects.create') }}">Aggiungi Progetto</a>
+                    <a class="nav-link" href="{{route('admin.types.create') }}">Crea Nuovo Tipo di Progetto</a>
                 </li>
             </ul>
 
