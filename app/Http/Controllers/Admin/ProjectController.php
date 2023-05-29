@@ -9,7 +9,9 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Technology;
 use App\Models\Type;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 
 class ProjectController extends Controller
 {
@@ -47,6 +49,11 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title'],'-');
+
+        if($request->hasFile('url')){
+           $path = Storage::put('cover',$request->url);
+           $data['url'] = $path;
+        }
 
         $newProject = new Project();
 
@@ -102,6 +109,15 @@ class ProjectController extends Controller
         $validate_data = $request->validated();
         $validate_data['slug'] = Str::slug($validate_data['title'],'-');
 
+        if($request->hasFile('url')){
+
+            if ($project->url) {
+                Storage::delete($project->url);
+            }
+            $path = Storage::put('cover',$request->url);
+            $data['url'] = $path;
+        }
+
         $project->technologies()->sync($request->technologies);
 
         $project->update($validate_data);
@@ -119,8 +135,26 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+
+        if ($project->url) {
+            Storage::delete($project->url);
+        }
         $project->delete();
 
         return redirect()->route('admin.projects.index');
+    }
+
+    public function deleteImage($slug) {
+
+        $project = Project::where('slug', $slug)->firstOrFail();
+
+        if ($project->url) {
+            Storage::delete($project->url);
+            $project->url = null;
+            $project->save();
+        }
+
+        return redirect()->route('admin.projects.edit', $project->slug);
+
     }
 }

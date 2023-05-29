@@ -5,7 +5,7 @@
     <div class="row my-5">
         <div class="card bg-white" style="width: 18rem;">
             @if ($project->url)
-              <img class="card-img-top" src="{{$project->url}}" alt="{{$project->title}}">
+              <img class="card-img-top" src="{{asset('storage/'. $project->url)}}" alt="{{$project->title}}">
             @endif
             
             <div class="card-body">

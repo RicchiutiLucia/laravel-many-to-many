@@ -4,7 +4,7 @@
 
         <div class="container">
             <div class="row">
-                <form method="POST" action="{{route('admin.projects.store')}}">
+                <form method="POST" action="{{route('admin.projects.store')}}"  enctype="multipart/form-data">
 
                     @csrf
 
@@ -35,8 +35,8 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="url" class="form-label">Immagine url:</label>
-                        <input type="text" class="form-control @error('preview_image') is-invalid @enderror" id="url" name="url" value="{{old('url')}}">
+                        <label for="url" class="form-label">Seleziona Immagine:</label>
+                        <input type="file" class="form-control @error('url') is-invalid @enderror" id="url" name="url">
                         @if ($errors->has('url'))
                             @error('url')
                                 <div class="invalid-feedback">

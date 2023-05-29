@@ -19,7 +19,9 @@
                     <tr>
                         <th>{{$project->id}}</th>
                         <td>{{$project->title}}</td>
-                        <td>{{$project->url}}</td>
+                        <td> @if ($project->url)
+                            <img class="img-thumbnail my-img-index" src="{{asset('storage/' . $project->url)}}" alt="{{$project->title}}"/>
+                        @endif</td>
                         <td>{{$project->type?->name}}</td>
                         <td>
                             @foreach ($project->technologies as $technology)

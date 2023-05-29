@@ -4,7 +4,7 @@
 
         <div class="container">
             <div class="row">
-                <form method="POST" action="{{route('admin.projects.update',['project'=>$project->slug])}}">
+                <form method="POST" action="{{route('admin.projects.update',['project'=>$project->slug])}}" enctype="multipart/form-data">
 
                     @csrf
                     @method('PUT')
@@ -37,8 +37,17 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="url" class="form-label">Immagine url:</label>
-                        <input type="text" class="form-control @error('url') is-invalid @enderror" id="preview_image" name="url" value="{{old('url', $project->url)}}">
+                        <label for="url" class="form-label">Seleziona immagine di copertina</label>
+
+                        @if ($project->url)
+                        <div class="my-img-wrapper">
+                            <img class="img-thumbnail my-img-thumb" src="{{asset('storage/' . $project->url)}}" alt="{{$project->title}}"/>
+                           <a href="{{route('admin.projects.deleteImage', ['slug' => $project->slug])}}" class="my-img-delete btn btn-danger">X</a>
+                        </div>
+                        @endif
+
+
+                        <input type="file" class="form-control @error('url') is-invalid @enderror" id="url" name="url" value="{{old('url', $project->url)}}">
                         @if ($errors->has('url'))
                             @error('url')
                                 <div class="invalid-feedback">

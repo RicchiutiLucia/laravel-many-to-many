@@ -26,7 +26,7 @@ class StoreProjectRequest extends FormRequest
         return [
             'title' => 'required|max:255|unique:projects',
             'description' => 'required|max:65635',
-            'url' => 'nullable|url|max:255',
+            'url' => 'nullable|image|max:1024',
             'type_id' => 'nullable|exists:types,id',
             'technologies' =>'exists:technologies,id'
             
@@ -42,7 +42,7 @@ class StoreProjectRequest extends FormRequest
             'description.required' => 'La descrizione è richiesta',
             'description.max' => 'Lunghezza massima descrizione è di 65535 caratteri',
 
-            'url.url' => 'L\'URL inserito non è valido',
+            'url.image' => 'L\'URL inserito non è valido',
             'url.max' => 'Lunghezza massima dell\'url è di 255 caratteri',
 
     
